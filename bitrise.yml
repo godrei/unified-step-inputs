@@ -5,3 +5,6 @@ workflows:
   xcode-archive:
     steps:
     - path::./xcode-archive: {}
+  xcode-test:
+    steps:
+    - path::./xcode-test: {}
