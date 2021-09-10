@@ -60,7 +60,7 @@ toolkit:
     package_name: github.com/bitrise-steplib/steps-xcode-archive
 inputs:
   #
-  # xcodebuild options
+  # xcodebuild configuration
   - project_path: $BITRISE_PROJECT_PATH
     opts:
       title: Project path
@@ -170,6 +170,26 @@ inputs:
 
         Otherwise the Step renews the managed Provisioning Profile if it is expired.
 
+  - api_key_path:
+    opts:
+      category: Automatic code singing
+      title: API Key URL
+      description: |-
+        URL of the AppStoreConnect API key.
+
+        Overrides the Apple Service Connection method, use only if you wish to do auto codesigning with different Apple Developer teams in the same Bitrise project.
+
+        The API key filename should includes the  used API key's Key ID, example:  https://URL/TO/AuthKey_[KEY_ID].p8
+
+        If set API Key Issuer ID (api_issuer) Input needs to be configured to.
+
+  - api_issuer:
+    opts:
+      category: Automatic code singing
+      title: API Key Issuer ID
+      description: |-
+        AppStoreConnect API key Issuer ID.
+
   - certificate_urls: $BITRISE_CERTIFICATE_URL
     opts:
       category: Automatic code singing
@@ -203,28 +223,6 @@ inputs:
       title: Keychain password
       description: |-
         Password for the provided Keychain.
-
-  #
-  # Apple Service Connection
-  - api_key_path:
-    opts:
-      category: Automatic code singing
-      title: API Key URL
-      description: |-
-        URL of the AppStoreConnect API key.
-
-        Overrides the Apple Service Connection method, use only if you wish to do auto codesigning with different Apple Developer teams in the same Bitrise project.
-
-        The API key filename should includes the  used API key's Key ID, example:  https://URL/TO/AuthKey_[KEY_ID].p8
-
-        If set API Key Issuer ID (api_issuer) Input needs to be configured to.
-
-  - api_issuer:
-    opts:
-      category: Automatic code singing
-      title: API Key Issuer ID
-      description: |-
-        AppStoreConnect API key Issuer ID.
 
   - build_url: $BITRISE_BUILD_URL
     opts:

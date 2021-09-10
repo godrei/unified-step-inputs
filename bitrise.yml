@@ -4,4 +4,4 @@ default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 workflows:
   xcode-archive:
     steps:
-    - path::./xcode-archive/updated: {}
+    - path::./xcode-archive: {}
