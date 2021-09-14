@@ -89,14 +89,25 @@ inputs:
       description: |-
         Xcode Build Configuration.
 
-        If not specified, xcodebuild will use the default Build Configuration.
+        If not specified, `xcodebuild` will use the default Build Configuration.
 
         The Input value will set xcodebuild’s `-configuration` option.
+
+  - xcconfig_content: COMPILER_INDEX_STORE_ENABLE = NO
+    opts:
+      category: xcodebuild configuration
+      title: Build settings overrides
+      summary: Apply the build settings as overrides.
+      description: |-
+        Apply the build settings as overrides.
+
+        The Input value will set xcodebuild’s `-xcconfig` option.
 
   - perform_clean_action: "no"
     opts:
       category: xcodebuild configuration
       title: Perform clean action
+      summary: If set `clean` xcodebuild action will be performed in addition to the `archive` action.
       description: |-
         If set `clean` xcodebuild action will be performed in addition to the `archive` action.
       value_options:
@@ -108,10 +119,13 @@ inputs:
     opts:
       category: xcodebuild configuration
       title: xcodebuild log persentation
+      summary: Defines how xcodebuild command’s log is presented.
       description: |-
-        If set to `xcpretty`, the xcodebuild command’s output will be prettified by xcpretty.
+        Defines how xcodebuild command’s log is presented.
 
-        If set to `xcodebuild`, only the last 20 lines of raw xcodebuild output will be visible in the build log.
+        Available options:
+        - `xcpretty`: The xcodebuild command’s output will be prettified by xcpretty.
+        - `xcodebuild`: Only the last 20 lines of raw xcodebuild output will be visible in the build log.
 
         The raw xcodebuild log will be exported in both cases.
       value_options:
@@ -123,6 +137,7 @@ inputs:
     opts:
       category: xcodebuild configuration
       title: Additional options for the xcodebuild command
+      summary: Additional options to be added to the executed xcodebuild command.
       description: |-
         Additional options to be added to the executed xcodebuild command.
 
@@ -130,26 +145,27 @@ inputs:
   # Automatic Code Signing
   - automatic_code_signing: "off"
     opts:
-      category: Automatic code singing
+      category: Automatic code signing
       title: Automatic code signing method
+      summary: This input determines which Bitrise Apple service connection should be used for automatic code signing.
       description: |-
         This input determines which Bitrise Apple service connection should be used for automatic code signing.
 
         Available values:
         - `off`: Do not do any auto codesigning
-        - `enterprise`: Bitrise Apple Service connection with an Apple Developer Enterpsie account
-        - `non-enterprise-with-api-key`: Bitrise Apple Service connection with API Key using a (non Enterpsie) Apple Developer account
-        - `non-enterprise-with-apple-id`: Bitrise Apple Service connection with Apple ID using a (non Enterpsie) Apple Developer account
+        - `enterprise-with-apple-id`: [Bitrise Apple Service connection with an Apple Developer Enterpsie account.](https://devcenter.bitrise.io/getting-started/connecting-to-services/connecting-to-an-apple-service-with-apple-id/)
+        - `api-key`: [Bitrise Apple Service connection with API Key.](https://devcenter.bitrise.io/getting-started/connecting-to-services/setting-up-connection-to-an-apple-service-with-api-key/)
+        - `apple-id`: [Bitrise Apple Service connection with Apple ID.](https://devcenter.bitrise.io/getting-started/connecting-to-services/setting-up-connection-to-an-apple-service-with-api-key/)
       value_options:
         - "off"
-        - "enterprise"
-        - "non-enterprise-with-api-key"
-        - "non-enterprise-with-apple-id"
+        - "enterprise-with-apple-id"
+        - "api-key"
+        - "apple-id"
       is_required: true
 
   - register_test_devices: "no"
     opts:
-      category: Automatic code singing
+      category: Automatic code signing
       title: Register test devices on the Apple Developer Portal
       summary: If set the step will register known test devices on Bitrise from team members with the Apple Developer Portal.
       description: |-
@@ -163,37 +179,19 @@ inputs:
 
   - min_profile_validity: 0
     opts:
-      category: Automatic code singing
+      category: Automatic code signing
       title: The minimum days the Provisioning Profile should be valid
+      summary: If set to >0 the managed Provisioning Profile will be renewed if it expires within the configured number of days.
       description: |-
         If set to >0 the managed Provisioning Profile will be renewed if it expires within the configured number of days.
 
         Otherwise the Step renews the managed Provisioning Profile if it is expired.
 
-  - api_key_path:
-    opts:
-      category: Automatic code singing
-      title: API Key URL
-      description: |-
-        URL of the AppStoreConnect API key.
-
-        Overrides the Apple Service Connection method, use only if you wish to do auto codesigning with different Apple Developer teams in the same Bitrise project.
-
-        The API key filename should includes the  used API key's Key ID, example:  https://URL/TO/AuthKey_[KEY_ID].p8
-
-        If set API Key Issuer ID (api_issuer) Input needs to be configured to.
-
-  - api_issuer:
-    opts:
-      category: Automatic code singing
-      title: API Key Issuer ID
-      description: |-
-        AppStoreConnect API key Issuer ID.
-
   - certificate_urls: $BITRISE_CERTIFICATE_URL
     opts:
-      category: Automatic code singing
+      category: Automatic code signing
       title: Code signing certificate URL
+      summary: URL of the code signing certificate to download.
       description: |-
         URL of the code signing certificate to download.
 
@@ -203,8 +201,9 @@ inputs:
 
   - passphrases: $BITRISE_CERTIFICATE_PASSPHRASE
     opts:
-      category: Automatic code singing
+      category: Automatic code signing
       title: Code signing certificate passphrase
+      summary: Passphrases for the provided code signing certificates.
       description: |-
         Passphrases for the provided code signing certificates.
 
@@ -212,29 +211,33 @@ inputs:
 
   - keychain_path: $BITRISE_KEYCHAIN_PATH
     opts:
-      category: Automatic code singing
+      category: Automatic code signing
       title: Keychain path
+      summary: Path to the Keychain where the code signing certificates will be installed.
       description: |-
         Path to the Keychain where the code signing certificates will be installed.
 
   - keychain_password: $BITRISE_KEYCHAIN_PASSWORD
     opts:
-      category: Automatic code singing
+      category: Automatic code signing
       title: Keychain password
+      summary: Password for the provided Keychain.
       description: |-
         Password for the provided Keychain.
 
   - build_url: $BITRISE_BUILD_URL
     opts:
-      category: Automatic code singing
+      category: Automatic code signing
       title: Bitrise build URL
+      summary: URL of the current Bitrise build.
       description: |-
         URL of the current Bitrise build.
 
   - build_api_token: $BITRISE_BUILD_API_TOKEN
     opts:
-      category: Automatic code singing
+      category: Automatic code signing
       title: Bitrise build API token
+      summary: API token to access Bitrise resources during the current build.
       description: |-
         API token to access Bitrise resources during the current build.
 
@@ -243,7 +246,7 @@ inputs:
   - distribution_method: "development"
     opts:
       title: Distribution method
-      summary: ""
+      summary: Describes how Xcode should export the archive.
       description: |-
         Describes how Xcode should export the archive.
       value_options:
@@ -267,7 +270,7 @@ inputs:
     opts:
       category: IPA export configuration
       title: Rebuild from bitcode
-      summary: ""
+      summary: For __non-App Store__ exports, should Xcode re-compile the app from bitcode?
       description: |
         For __non-App Store__ exports, should Xcode re-compile the app from bitcode?
       value_options:
@@ -279,7 +282,7 @@ inputs:
     opts:
       category: IPA export configuration
       title: Include bitcode
-      summary: ""
+      summary: For __App Store__ exports, should the package include bitcode?
       description: |-
         For __App Store__ exports, should the package include bitcode?
       value_options:
@@ -291,7 +294,7 @@ inputs:
     opts:
       category: IPA export configuration
       title: iCloud container environment
-      summary: ""
+      summary: If the app is using CloudKit, this configures the "com.apple.developer.icloud-container-environment" entitlement.
       description: |-
         If the app is using CloudKit, this configures the "com.apple.developer.icloud-container-environment" entitlement.
 
@@ -301,56 +304,11 @@ inputs:
     opts:
       category: IPA export configuration
       title: Export options plist content
+      summary: Specifies a plist file content that configures archive exporting.
       description: |-
         Specifies a plist file content that configures archive exporting.
 
         If not set the Step will auto-generate it.
-
-  #
-  # Xcode Build settings
-  - development_team:
-    opts:
-      category: Override Xcode project's Build Settings
-      title: Development Team
-      summary: The team ID of a development team to use for signing certificates and provisioning profiles.
-      description: |-
-        The team ID of a development team to use for signing certificates and provisioning profiles.
-
-        The Input value will set `DEVELOPMENT_TEAM` Build setting.
-
-  - code_signing_identity:
-    opts:
-      category: Override Xcode project's Build Settings
-      title: Code Signing Identity
-      summary: The name, also known as the _common name_, of a code-signing certificate.
-      description: |-
-        The name, also known as the _common name_, of a code-signing certificate.
-
-        The Input value will set `CODE_SIGN_IDENTITY` Build setting.
-
-  - provisioning_profile_specifier:
-    opts:
-      category: Override Xcode project's Build Settings
-      title: Provisioning Profile
-      summary: Must contain a profile name (or UUID).
-      description: |-
-        Must contain a profile name (or UUID).
-
-        The Input value will set `PROVISIONING_PROFILE_SPECIFIER` Build setting.
-
-  - disable_index_while_building: "yes"
-    opts:
-      category: Override Xcode project's Build Settings
-      title: Disable Index-While-Building Functionality
-      summary: Control whether the compiler should emit index data while building.
-      description: |-
-        Control whether the compiler should emit index data while building.
-
-        The Input value will set `COMPILER_INDEX_STORE_ENABLE` Build setting.
-      value_options:
-        - "yes"
-        - "no"
-      is_required: true
 
   #
   # Step output configuration
@@ -358,7 +316,7 @@ inputs:
     opts:
       category: Step Output Export configuration
       title: Output directory path
-      summary: ""
+      summary: This directory will contain the generated  artifacts.
       description: |-
         This directory will contain the generated  artifacts.
       is_required: true
@@ -367,6 +325,7 @@ inputs:
     opts:
       category: Step Output Export configuration
       title: Export all dSYMs
+      summary: Export additional dSYM files for Frameworks, not just the app dSYM file.
       description: |-
         Export additional dSYM files for Frameworks, not just the app dSYM file.
       value_options:
@@ -378,7 +337,7 @@ inputs:
     opts:
       category: Step Output Export configuration
       title: Generated artifact name
-      summary:
+      summary: This name will be used as basename for the generated Xcode Archive, App, IPA and dSYM files.
       description: |-
         This name will be used as basename for the generated Xcode Archive, App, IPA and dSYM files.
 
@@ -388,10 +347,13 @@ inputs:
     opts:
       category: Caching
       title: Enable collecting cache content
+      summary: Defines what cache content should be automatically collected.
       description: |-
+        Defines what cache content should be automatically collected.
+
         Available options:
-        - `none`: Disable collecting cache content
-        - `swift_packages`: Collect Swift PM packages added to the Xcode project
+        - `none`: Disable collecting cache content.
+        - `swift_packages`: Collect Swift PM packages added to the Xcode project.
       value_options:
         - "none"
         - "swift_packages"
@@ -403,6 +365,7 @@ inputs:
     opts:
       category: Debugging
       title: Enable verbose logging
+      summary: If set the Step will print additional logs for debugging.
       description: |-
         If set the Step will print additional logs for debugging.
       value_options:

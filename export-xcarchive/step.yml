@@ -1,0 +1,234 @@
+title: Export iOS and tvOS Xcode archive
+summary: Export iOS and tvOS Xcode archive
+description: |-
+  Export iOS and tvOS Xcode archive.
+
+  Exports .ipa from iOS and tvOS .xcarchive.
+website: https://github.com/bitrise-steplib/steps-export-xcarchive
+source_code_url: https://github.com/bitrise-steplib/steps-export-xcarchive
+support_url: https://github.com/bitrise-steplib/steps-export-xcarchive/issues
+host_os_tags:
+  - osx-10.10
+project_type_tags:
+  - ios
+  - cordova
+  - ionic
+  - react-native
+  - flutter
+  - xamarin
+type_tags:
+  - utility
+is_always_run: false
+is_skippable: false
+toolkit:
+  go:
+    package_name: github.com/bitrise-steplib/steps-export-xcarchive
+inputs:
+  #
+  # xcodebuild configuration
+  - archive_path: $BITRISE_XCARCHIVE_PATH
+    opts:
+      title: Archive path
+      summary: Specifies the archive that should be exported.
+      description: |-
+        Specifies the archive that should be exported.
+
+        The Input value will set xcodebuild’s `-archivePath` option.
+      is_required: true
+
+  #
+  # Automatic Code Signing
+  - automatic_code_signing: "off"
+    opts:
+      category: Automatic code signing
+      title: Automatic code signing method
+      summary: This input determines which Bitrise Apple service connection should be used for automatic code signing.
+      description: |-
+        This input determines which Bitrise Apple service connection should be used for automatic code signing.
+
+        Available values:
+        - `off`: Do not do any auto codesigning
+        - `enterprise-with-apple-id`: [Bitrise Apple Service connection with an Apple Developer Enterpsie account.](https://devcenter.bitrise.io/getting-started/connecting-to-services/connecting-to-an-apple-service-with-apple-id/)
+        - `api-key`: [Bitrise Apple Service connection with API Key.](https://devcenter.bitrise.io/getting-started/connecting-to-services/setting-up-connection-to-an-apple-service-with-api-key/)
+        - `apple-id`: [Bitrise Apple Service connection with Apple ID.](https://devcenter.bitrise.io/getting-started/connecting-to-services/setting-up-connection-to-an-apple-service-with-api-key/)
+      value_options:
+        - "off"
+        - "enterprise-with-apple-id"
+        - "api-key"
+        - "apple-id"
+      is_required: true
+
+  - register_test_devices: "no"
+    opts:
+      category: Automatic code signing
+      title: Register test devices on the Apple Developer Portal
+      summary: If set the step will register known test devices on Bitrise from team members with the Apple Developer Portal.
+      description: |-
+        If set the step will register known test devices on Bitrise from team members with the Apple Developer Portal.
+
+        Note that setting this to "yes" may cause devices to be registered against your limited quantity of test devices in the Apple Developer Portal, which can only be removed once annually during your renewal window.
+      value_options:
+        - "yes"
+        - "no"
+      is_required: true
+
+  - min_profile_validity: 0
+    opts:
+      category: Automatic code signing
+      title: The minimum days the Provisioning Profile should be valid
+      summary: If set to >0 the managed Provisioning Profile will be renewed if it expires within the configured number of days.
+      description: |-
+        If set to >0 the managed Provisioning Profile will be renewed if it expires within the configured number of days.
+
+        Otherwise the Step renews the managed Provisioning Profile if it is expired.
+
+  - certificate_urls: $BITRISE_CERTIFICATE_URL
+    opts:
+      category: Automatic code signing
+      title: Code signing certificate URL
+      summary: URL of the code signing certificate to download.
+      description: |-
+        URL of the code signing certificate to download.
+
+        Multiple URLs can be specified, separated by a pipe (`|`) character.
+
+        Local file path can be specified, using the `file://` URL scheme.
+
+  - passphrases: $BITRISE_CERTIFICATE_PASSPHRASE
+    opts:
+      category: Automatic code signing
+      title: Code signing certificate passphrase
+      summary: Passphrases for the provided code signing certificates.
+      description: |-
+        Passphrases for the provided code signing certificates.
+
+        Specify as many passphrases as many Code signing certificate URL provided, separated by a pipe (`|`) character.
+
+  - keychain_path: $BITRISE_KEYCHAIN_PATH
+    opts:
+      category: Automatic code signing
+      title: Keychain path
+      summary: Path to the Keychain where the code signing certificates will be installed.
+      description: |-
+        Path to the Keychain where the code signing certificates will be installed.
+
+  - keychain_password: $BITRISE_KEYCHAIN_PASSWORD
+    opts:
+      category: Automatic code signing
+      title: Keychain password
+      summary: Password for the provided Keychain.
+      description: |-
+        Password for the provided Keychain.
+
+  - build_url: $BITRISE_BUILD_URL
+    opts:
+      category: Automatic code signing
+      title: Bitrise build URL
+      summary: URL of the current Bitrise build.
+      description: |-
+        URL of the current Bitrise build.
+
+  - build_api_token: $BITRISE_BUILD_API_TOKEN
+    opts:
+      category: Automatic code signing
+      title: Bitrise build API token
+      summary: API token to access Bitrise resources during the current build.
+      description: |-
+        API token to access Bitrise resources during the current build.
+
+  #
+  # IPA export Inputs
+  - product: "app"
+    opts:
+      title: Select a product to distribute
+      summary: Describes which product to export.
+      description: |-
+        Describes which product to export.
+      value_options:
+      - "app"
+      - "app-clip"
+      is_required: true
+
+  - distribution_method: "development"
+    opts:
+      title: Distribution method
+      summary: Describes how Xcode should export the archive.
+      description: |-
+        Describes how Xcode should export the archive.
+      value_options:
+        - "development"
+        - "app-store"
+        - "ad-hoc"
+        - "enterprise"
+      is_required: true
+
+  - export_development_team:
+    opts:
+      category: IPA export configuration
+      title: Developer Portal team
+      summary: The Developer Portal team to use for this export.
+      description: |-
+        The Developer Portal team to use for this export.
+
+        Defaults to the team used to build the archive.
+
+  - compile_bitcode: "yes"
+    opts:
+      category: IPA export configuration
+      title: Rebuild from bitcode
+      summary: For __non-App Store__ exports, should Xcode re-compile the app from bitcode?
+      description: |
+        For __non-App Store__ exports, should Xcode re-compile the app from bitcode?
+      value_options:
+        - "yes"
+        - "no"
+      is_required: true
+
+  - upload_bitcode: "yes"
+    opts:
+      category: IPA export configuration
+      title: Include bitcode
+      summary: For __App Store__ exports, should the package include bitcode?
+      description: |-
+        For __App Store__ exports, should the package include bitcode?
+      value_options:
+        - "yes"
+        - "no"
+      is_required: true
+
+  - export_options_plist_content:
+    opts:
+      category: IPA export configuration
+      title: Export options plist content
+      summary: Specifies a plist file content that configures archive exporting.
+      description: |-
+        Specifies a plist file content that configures archive exporting.
+
+        If not set the Step will auto-generate it.
+
+  #
+  # Debugging
+  - verbose_log: "no"
+    opts:
+      category: Debugging
+      title: Enable verbose logging
+      summary: If set the Step will print additional logs for debugging.
+      description: |-
+        If set the Step will print additional logs for debugging.
+      value_options:
+        - "yes"
+        - "no"
+      is_required: true
+
+outputs:
+  - BITRISE_IPA_PATH:
+    opts:
+      title: The created iOS or tvOS .ipa file's path.
+  - BITRISE_DSYM_PATH:
+    opts:
+      title: The created iOS or tvOS .dSYM zip file's path.
+      description: |-
+        Step will collect every dsym (app dsym and framwork dsyms) in a directory, zip it and export the zipped directory path.
+  - BITRISE_IDEDISTRIBUTION_LOGS_PATH:
+    opts:
+      title: Path to the xcdistributionlogs zip

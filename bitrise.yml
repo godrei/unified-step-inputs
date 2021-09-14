@@ -8,3 +8,12 @@ workflows:
   xcode-test:
     steps:
     - path::./xcode-test: {}
+  export-xcarchive:
+    steps:
+    - path::./export-xcarchive: {}
+  xcode-build-for-test:
+    steps:
+    - path::./xcode-build-for-test: {}
+  ios-auto-provision:
+    steps:
+    - path::./ios-auto-provision: {}
